@@ -7,22 +7,21 @@
                     <form action="{{ route('klant.update', $klant) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        <!-- Add form fields for Klant attributes -->
                         <div class="mb-4">
                             <label for="naam" class="block text-sm font-medium text-gray-700">Naam</label>
                             <input type="text" name="naam" id="naam" value="{{ old('naam', $klant->naam) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         </div>
                         <div class="mb-4">
                             <label for="volwassenen" class="block text-sm font-medium text-gray-700">Volwassenen</label>
-                            <input type="number" name="volwassen" id="volwassen" value="{{ old('volwassen', $klant->volwassen) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <input type="number" min="0" name="volwassen" id="volwassen" value="{{ old('volwassen', $klant->volwassen) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         </div>
                         <div class="mb-4">
                             <label for="kinderen" class="block text-sm font-medium text-gray-700">Kinderen</label>
-                            <input type="number" name="kinderen" id="kinderen" value="{{ old('kinderen', $klant->kinderen) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <input type="number" min="0" name="kinderen" id="kinderen" value="{{ old('kinderen', $klant->kinderen) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         </div>
                         <div class="mb-4">
                             <label for="babys" class="block text-sm font-medium text-gray-700">Baby's</label>
-                            <input type="number" name="babys" id="babys" value="{{ old('babys', $klant->babys) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <input type="number" min="0" name="babys" id="babys" value="{{ old('babys', $klant->babys) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         </div>
                         <div class="mb-4">
                             <label for="postcode" class="block text-sm font-medium text-gray-700">Postcode</label>

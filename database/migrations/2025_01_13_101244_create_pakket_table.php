@@ -13,8 +13,6 @@ class CreatePakketTable extends Migration
         Schema::create('pakket', function (Blueprint $table) {
             $table->id();
             $table->string('naam');
-            $table->text('inhoud');
-            $table->string('postcode');
             $table->timestamps();
         });
     }

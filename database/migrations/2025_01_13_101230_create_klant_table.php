@@ -19,6 +19,7 @@ class CreateKlantTable extends Migration
             $table->string('postcode');
             $table->text('wensen')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->foreignId('pakket_id')->nullable()->constrained('pakket');
             $table->timestamps();
         });
     }

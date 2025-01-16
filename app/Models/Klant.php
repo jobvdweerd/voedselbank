@@ -12,6 +12,13 @@ class Klant extends Model
     protected $table = 'klant';
 
     protected $fillable = [
-        'naam', 'volwassen', 'kinderen', 'babys', 'postcode', 'wensen', 'is_active'
+        'naam', 'volwassen', 'kinderen', 'babys', 'postcode', 'wensen', 'is_active', 'pakket_id',
     ];
+    public function pakket()
+    {
+        return $this->belongsTo(Pakket::class);
+    }
+
+
+
 }

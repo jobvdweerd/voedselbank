@@ -60,6 +60,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_MANAGER])->group(function
     Route::get('/klant/{klant}/edit', [KlantController::class, 'edit'])->name('klant.edit');
     Route::put('/klant/{klant}', [KlantController::class, 'update'])->name('klant.update');
     Route::post('/klant/{klant}/inactive', [KlantController::class, 'setInactive'])->name('klant.inactive');
+    Route::put('/klant/{klant}/update-package', [KlantController::class, 'updatePackage'])->name('klant.updatePackage');
 });
 
 Route::middleware(['auth', 'role:manager'])->group(function () {
