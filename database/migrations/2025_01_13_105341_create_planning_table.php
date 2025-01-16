@@ -12,6 +12,8 @@ return new class extends Migration {
             $table->integer('hour');
             $table->boolean('beschikbaar');
             $table->string('functie');
+            $table->string('status')->default('pending');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

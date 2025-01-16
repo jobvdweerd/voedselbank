@@ -15,9 +15,10 @@ class CreateKlantTable extends Migration
             $table->string('naam');
             $table->boolean('volwassen');
             $table->integer('kinderen');
-            $table->integer('baby\'s');
+            $table->integer('babys');
             $table->string('postcode');
             $table->text('wensen')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

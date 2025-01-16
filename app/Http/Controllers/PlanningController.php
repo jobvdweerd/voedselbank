@@ -7,30 +7,12 @@ use App\Models\Planning;
 
 class PlanningController extends Controller
 {
-    public function index()
+    public function showManagerPlanning()
     {
-        $requests = Planning::where('status', 'pending')->get();
-        return view('planning.requests', compact('requests'));
+        $plannings = Planning::all();
+
+        return view('managerooster', compact('plannings'));
     }
-
-    public function approve($id)
-    {
-        $planning = Planning::find($id);
-        $planning->status = 'approved';
-        $planning->save();
-
-        return redirect()->back()->with('success', 'Planning approved.');
-    }
-
-    public function reject($id)
-    {
-        $planning = Planning::find($id);
-        $planning->status = 'rejected';
-        $planning->save();
-
-        return redirect()->back()->with('success', 'Planning rejected.');
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -47,9 +29,51 @@ class PlanningController extends Controller
                 'hour' => $hour,
                 'beschikbaar' => $request->input('beschikbaar'),
                 'functie' => $request->input('function'),
+                'status' => 'pending',
+                'user_id' => auth()->id(),
             ]);
         }
 
-        return redirect()->route('planning')->with('success', 'Planning opgeslagen');
+        return redirect()->route('planning')->with('success', 'Planning opgeslagen en wacht op goedkeuring');
+    }
+    public function updateStatus(Request $request, Planning $planning)
+    {
+        $planning->update(['status' => $request->input('status')]);
+
+        return redirect()->route('managerooster')->with('success', 'Planning status bijgewerkt');
+    }
+    public function showDagrooster(Request $request)
+    {
+        $date = $request->input('date', \Carbon\Carbon::now()->format('Y-m-d'));
+        $planning = Planning::whereDate('datum', $date)
+            ->where('status', 'accepted')
+            ->get()
+            ->keyBy('hour');
+
+        $emptyRoster = collect();
+        for ($hour = 8; $hour <= 17; $hour++) {
+            $emptyRoster->push((object)[
+                'datum' => $date,
+                'hour' => $hour,
+                'beschikbaar' => $planning->has($hour) ? $planning[$hour]->beschikbaar : null,
+                'functie' => $planning->has($hour) ? $planning[$hour]->functie : null,
+                'user' => $planning->has($hour) ? $planning[$hour]->user : null,
+            ]);
+        }
+
+        $planning = $emptyRoster;
+        return view('dagrooster', compact('planning', 'date'));
+    }
+    public function update(Request $request)
+    {
+        foreach ($request->datum as $id => $datum) {
+            $planning = \App\Models\Planning::find($id);
+            $planning->datum = $datum;
+            $planning->beschikbaar = $request->beschikbaar[$id];
+            $planning->functie = $request->functie[$id];
+            $planning->save();
+        }
+
+        return redirect()->route('managerooster')->with('success', 'Rooster updated successfully.');
     }
 }

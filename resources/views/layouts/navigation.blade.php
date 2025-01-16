@@ -17,8 +17,14 @@
                         {{ __('Dagrooster') }}
                     </x-nav-link>
                     @if (Auth::user()->role_id == \App\Models\User::ROLE_MANAGER)
-                        <x-nav-link :href="route('maandrooster')" :active="request()->routeIs('maandrooster')">
-                            {{ __('Maandrooster') }}
+                        <x-nav-link :href="route('managerooster')" :active="request()->routeIs('managerooster')">
+                            {{ __('Manage rooster') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('klant.create')" :active="request()->routeIs('klant.create')">
+                            {{ __('Klant aanmaken') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('klantengegevens')" :active="request()->routeIs('klantengegevens')">
+                            {{ __('Klantengegevens') }}
                         </x-nav-link>
                     @endif
                 </div>

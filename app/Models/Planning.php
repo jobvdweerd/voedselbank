@@ -1,4 +1,5 @@
 <?php
+// app/Models/Planning.php
 
 namespace App\Models;
 
@@ -9,12 +10,14 @@ class Planning extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['datum', 'beschikbaar', 'functie', 'hour'];
     protected $table = 'planning';
+
+    protected $fillable = [
+        'datum', 'hour', 'beschikbaar', 'functie', 'status', 'user_id'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

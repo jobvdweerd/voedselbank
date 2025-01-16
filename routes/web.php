@@ -5,10 +5,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CheckRole;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KlantController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/klantengegevens', [KlantController::class, 'index'])->middleware(['auth', 'verified'])->name('klantengegevens');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -31,13 +30,36 @@ Route::get('/dagrooster', function () {
     $planning = \App\Models\Planning::all();
     return view('dagrooster', compact('planning'));
 })->middleware(['auth', 'verified'])->name('dagrooster');
+Route::get('/dagrooster', [PlanningController::class, 'showDagrooster'])->middleware(['auth', 'verified'])->name('dagrooster');
 
 require __DIR__.'/auth.php';
 Route::middleware([CheckRole::class . ':' . User::ROLE_MANAGER])->group(function () {
+    Route::get('/managerooster', [PlanningController::class, 'showManagerPlanning'])->middleware(['auth', 'verified'])->name('managerooster');
+    Route::post('/managerooster/update', [PlanningController::class, 'update'])->name('managerooster.update');
+    Route::patch('/planning/{planning}/updateStatus', [PlanningController::class, 'updateStatus'])->name('planning.updateStatus');
+});
+Route::middleware([CheckRole::class . ':' . User::ROLE_MANAGER])->group(function () {
+        Route::get('/klant/{klant}/edit', [KlantController::class, 'edit'])->name('klant.edit');
+        Route::put('/klant/{klant}', [KlantController::class, 'update'])->name('klant.update');
     Route::get('/maandrooster', function () {
         $planning = \App\Models\Planning::all();
         return view('maandrooster', compact('planning'));
     })->middleware(['auth', 'verified'])->name('maandrooster');
+    Route::get('/managerooster', function () {
+        $planning = \App\Models\Planning::all();
+        return view('managerooster', compact('planning'));
+    })->middleware(['auth', 'verified'])->name('managerooster');
+    Route::post('/managerooster/update', [PlanningController::class, 'update'])->name('managerooster.update');
+    Route::post('/klant/{klant}/toggleActive', [KlantController::class, 'toggleActive'])->name('klant.toggleActive');
+});
+
+Route::middleware([CheckRole::class . ':' . User::ROLE_MANAGER])->group(function () {
+    Route::get('/klantengegevens', [KlantController::class, 'index'])->middleware(['auth', 'verified'])->name('klantengegevens');
+    Route::get('/klant/create', [KlantController::class, 'create'])->name('klant.create');
+    Route::post('/klant', [KlantController::class, 'store'])->name('klant.store');
+    Route::get('/klant/{klant}/edit', [KlantController::class, 'edit'])->name('klant.edit');
+    Route::put('/klant/{klant}', [KlantController::class, 'update'])->name('klant.update');
+    Route::post('/klant/{klant}/inactive', [KlantController::class, 'setInactive'])->name('klant.inactive');
 });
 
 Route::middleware(['auth', 'role:manager'])->group(function () {
