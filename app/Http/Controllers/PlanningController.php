@@ -10,7 +10,6 @@ class PlanningController extends Controller
     public function showManagerPlanning()
     {
         $plannings = Planning::all();
-
         return view('managerooster', compact('plannings'));
     }
     public function store(Request $request)

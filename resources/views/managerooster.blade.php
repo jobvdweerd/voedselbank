@@ -26,19 +26,19 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($planning as $plannings)
+                        @foreach ($plannings as $planning)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {{ $plannings->hour }}:00 - {{ $plannings->hour + 1 }}:00
+                                    {{ $planning->hour }}:00 - {{ $planning->hour + 1 }}:00
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $plannings->functie }} ({{ $plannings->beschikbaar ? 'Beschikbaar' : 'Niet beschikbaar' }})
+                                    {{ $planning->functie }} ({{ $planning->beschikbaar ? 'Beschikbaar' : 'Niet beschikbaar' }})
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $plannings->status }}
+                                    {{ $planning->status }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <form method="POST" action="{{ route('planning.updateStatus', $plannings->id) }}">
+                                    <form method="POST" action="{{ route('planning.updateStatus', $planning->id) }}">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" name="status" value="accepted" class="btn btn-success">Accepteren</button>
@@ -46,7 +46,7 @@
                                     </form>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $plannings->user->name }}
+                                    {{ $planning->user->name }}
                                 </td>
                             </tr>
                         @endforeach

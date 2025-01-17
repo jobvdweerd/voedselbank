@@ -25,6 +25,9 @@
                         <x-nav-link :href="route('klant.create')" :active="request()->routeIs('klant.create')">
                             {{ __('Klant aanmaken') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('klantengegevens')" :active="request()->routeIs('klantengegevens')">
+                            {{ __('Klantengegevens') }}
+                        </x-nav-link>
                     @elseif (Auth::user()->role_id == \App\Models\User::ROLE_VERDELER)
                         <x-nav-link :href="route('klantengegevens')" :active="request()->routeIs('klantengegevens')">
                             {{ __('Klantengegevens') }}
