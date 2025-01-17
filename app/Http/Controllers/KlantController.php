@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Klant;
 use App\Models\Pakket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class KlantController extends Controller
 {
@@ -19,23 +21,38 @@ class KlantController extends Controller
     {
         return view('createklant');
     }
+    // app/Http/Controllers/KlantController.php
+
     public function store(Request $request)
     {
-        $request->validate([
-            'naam' => 'required|string|max:255',
-            'volwassen' => 'required|integer',
-            'kinderen' => 'required|integer',
-            'babys' => 'required|integer',
-            'postcode' => 'required|string|regex:/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/',
-            'wensen' => 'nullable|string',
-        ], [
-            'postcode.required' => 'De postcode is verplicht.',
-            'postcode.regex' => 'De postcode moet een geldig Nederlands formaat hebben (bijv. 1234 AB).',
-        ]);
+        $accountType = $request->input('account_type');
 
-        Klant::create($request->all());
+        if ($accountType === 'klant') {
+            $klant = new Klant();
+            $klant->naam = $request->input('naam');
+            $klant->volwassen = $request->input('volwassen');
+            $klant->kinderen = $request->input('kinderen');
+            $klant->babys = $request->input('babys');
+            $klant->postcode = $request->input('postcode');
+            $klant->wensen = $request->input('wensen');
+            $klant->save();
+        } elseif ($accountType === 'medewerker') {
+            $user = new User();
+            $user->name = $request->input('naam');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->role_id = User::ROLE_MEDEWERKER;
+            $user->save();
+        } elseif ($accountType === 'verdeler') {
+            $user = new User();
+            $user->name = $request->input('naam');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->role_id = User::ROLE_VERDELER;
+            $user->save();
+        }
 
-        return redirect()->route('klantengegevens')->with('success', 'Klant created successfully.');
+        return redirect()->route('klantengegevens')->with('success', 'Account created successfully.');
     }
     public function edit(Klant $klant)
     {
